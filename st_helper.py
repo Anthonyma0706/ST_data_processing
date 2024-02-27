@@ -23,6 +23,7 @@ sc.settings.verbosity = 3
 def process_st_data(path, num_hvg, hvg_list,
                             min_counts = 5000, max_counts = 35000, 
                             pct_counts_mt = 20, min_cells = 10, 
+                            #qc_filter = True,
                             log_norm = True, 
                             clustering = False
                             ):
@@ -42,6 +43,8 @@ def process_st_data(path, num_hvg, hvg_list,
     sc.pp.calculate_qc_metrics(adata, inplace=True)
     adata.obsm['spatial'] = adata.obsm['spatial'].astype(float)
     adata.var_names_make_unique()
+
+    #if qc_filter:
     # High mitochondrial genes indicates low quality cells
     adata.var["mt"] = adata.var_names.str.startswith("MT-")
     sc.pp.calculate_qc_metrics(adata, qc_vars=["mt"], inplace=True)
